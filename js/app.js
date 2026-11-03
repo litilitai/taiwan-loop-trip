@@ -278,6 +278,24 @@
     });
   }
 
+  // 路線圖旁的城市對照表：每個城市落在第幾天
+  function renderLegend() {
+    const box = $('route-legend');
+    box.replaceChildren();
+    CITIES.forEach((c, i) => {
+      const di = state.plan.findIndex((d) => d.title.split(' → ').indexOf(c.name) !== -1);
+      const btn = el('button', { type: 'button', className: 'legend-item' }, [
+        el('span', { className: 'legend-num', textContent: String(i + 1) }),
+        el('span', { className: 'legend-name', textContent: c.name }),
+        el('span', { className: 'legend-day', textContent: di >= 0 ? 'Day ' + (di + 1) : '—' })
+      ]);
+      btn.dataset.city = c.name;
+      btn.dataset.day = di;
+      btn.disabled = di < 0;
+      box.append(el('li', {}, [btn]));
+    });
+  }
+
   function highlightDay(di) {
     const names = di == null || !state.plan[di] ? [] : state.plan[di].title.split(' → ');
     mapCities().forEach((g) => g.classList.toggle('active', names.indexOf(g.dataset.city) !== -1));
@@ -356,6 +374,7 @@
     });
     renderProgress();
     renderMap();
+    renderLegend();
   }
 
   function renderAll() {
@@ -468,6 +487,17 @@
       const g = e.target.closest('.city');
       if ((e.key === 'Enter' || e.key === ' ') && g && state) { e.preventDefault(); jumpToCity(g.dataset.city); }
     });
+
+    const legend = $('route-legend');
+    legend.addEventListener('click', (e) => {
+      const b = e.target.closest('.legend-item');
+      if (b && state) jumpToCity(b.dataset.city);
+    });
+    legend.addEventListener('mouseover', (e) => {
+      const b = e.target.closest('.legend-item');
+      if (b && +b.dataset.day >= 0) highlightDay(+b.dataset.day);
+    });
+    legend.addEventListener('mouseleave', () => highlightDay(null));
 
     const list = $('days-list');
     const dayOf = (e) => {

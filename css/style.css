@@ -104,7 +104,8 @@ body.has-plan .needs-plan { display: inline-block; }
   --dr-bloom-blur: 10px;
   --dr-bloom-opacity: 0.7;
 }
-.hero-inner { position: relative; z-index: 1; width: 100%; max-width: 980px; margin: 0 auto; padding: 56px 20px; }
+/* 寬度與 main 一致，文字左緣才會和下方卡片對齊 */
+.hero-inner { position: relative; z-index: 1; width: 100%; max-width: 1100px; margin: 0 auto; padding: 56px 16px; }
 .eyebrow { letter-spacing: .15em; text-transform: uppercase; font-size: .85rem; opacity: .85; margin: 0; }
 .hero h1 { font-size: clamp(2rem, 6vw, 3.4rem); line-height: 1.2; margin: .2em 0; text-shadow: 0 2px 16px rgba(0, 0, 0, .3); }
 .lead { font-size: 1.1rem; max-width: 34em; margin: 0 0 1em; }
@@ -152,7 +153,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 28px 16px 48px; display: grid
 }
 
 /* ───────── 表單 ───────── */
-.settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; align-items: end; }
+.settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; align-items: end; }
+.settings .btn { width: 100%; }
 .settings label, .signup label { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; color: var(--muted); }
 input, select {
   font: inherit; color: var(--ink);
@@ -208,12 +210,28 @@ body.has-plan .intro { display: none; }
 .bar-track { height: 8px; background: var(--soft); border-radius: 999px; overflow: hidden; margin-top: 5px; }
 .bar { display: block; height: 100%; background: var(--c); border-radius: 999px; transition: width .35s ease; }
 .total { display: flex; justify-content: space-between; align-items: baseline; border-top: 2px solid var(--line); padding-top: 12px; margin-top: 8px; }
-.total strong { font-size: 1.5rem; color: var(--brand); }
+.total strong { font-size: 1.5rem; color: var(--brand); white-space: nowrap; }
+.total small { display: block; color: var(--muted); font-size: .78rem; font-weight: 400; line-height: 1.3; }
 .total.per { border: 0; padding-top: 4px; margin-top: 0; }
 .total.per strong { font-size: 1.1rem; }
 
 .map-panel { margin-bottom: 20px; }
+.map-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(210px, 270px); gap: 24px; align-items: center; }
 #route-map svg { display: block; width: 100%; max-width: 380px; margin: 0 auto; }
+.legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.legend-item {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+  font: inherit; color: var(--ink); background: var(--soft);
+  border: 1px solid transparent; border-radius: 12px; padding: 7px 12px; min-height: 40px; cursor: pointer;
+}
+.legend-item:hover:not(:disabled) { border-color: var(--teal); }
+.legend-item:disabled { opacity: .45; cursor: default; }
+.legend-num {
+  display: inline-grid; place-items: center; flex: none; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--teal); color: #fff; font-size: .75rem; font-weight: 700;
+}
+.legend-name { flex: 1; font-size: .92rem; }
+.legend-day { font-size: .8rem; color: var(--muted); white-space: nowrap; }
 .island { fill: var(--island); stroke: var(--btn); stroke-width: 2; stroke-linejoin: round; }
 .route { fill: none; stroke: var(--teal); stroke-width: 2.5; stroke-dasharray: 6 5; stroke-linejoin: round; }
 .city { cursor: pointer; }
@@ -266,7 +284,8 @@ body.has-plan .intro { display: none; }
 
 /* ───────── 報名 ───────── */
 .signup .sub { margin: -6px 0 14px; color: var(--muted); }
-.signup form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; align-items: end; }
+.signup form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: end; max-width: 760px; }
+.signup form .btn { grid-column: 1 / -1; justify-self: start; min-width: 160px; }
 .signup .consent { grid-column: 1 / -1; flex-direction: row; align-items: flex-start; gap: 10px; color: var(--ink); cursor: pointer; }
 .signup .consent input { width: 20px; height: 20px; min-height: 0; padding: 0; margin-top: 2px; accent-color: var(--btn); flex: none; }
 .signup-msg { margin: 12px 0 0; min-height: 1.5em; font-size: .9rem; }
@@ -309,6 +328,16 @@ footer .fine + .fine { margin-top: 2px; }
   box-shadow: 0 6px 24px rgba(0, 0, 0, .3); transition: opacity .2s, transform .2s; max-width: calc(100vw - 32px);
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* 版面較窄時，路線圖與城市對照表上下排列 */
+@media (max-width: 640px), (min-width: 861px) and (max-width: 1100px) {
+  .map-wrap { grid-template-columns: 1fr; }
+  .legend { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+}
+
+@media (max-width: 600px) {
+  .signup form { grid-template-columns: 1fr; }
+}
 
 @media (max-width: 860px) {
   .result-grid { grid-template-columns: 1fr; }

@@ -99,7 +99,7 @@
           <h2 id="budget-title"><span class="step">2</span>預算估算</h2>
           <div id="budget-rows"></div>
           <div class="total">
-            <span>總計（含 10% 預備金）</span>
+            <span>總計<small>含 10% 預備金</small></span>
             <strong id="total"></strong>
           </div>
           <div class="total per">
@@ -112,8 +112,11 @@
         <div class="itinerary">
           <section id="map" class="panel map-panel" aria-labelledby="map-title">
             <h2 id="map-title"><span class="step">3</span>環島路線圖</h2>
-            <div id="route-map"></div>
-            <p class="hint">示意圖，非精確地圖。點圓點跳到該城市的行程；滑過每日卡片會標示當天城市；城市的景點全部打勾後會變綠色。</p>
+            <div class="map-wrap">
+              <div id="route-map"></div>
+              <ol id="route-legend" class="legend" aria-label="城市與對應天數"></ol>
+            </div>
+            <p class="hint">示意圖，非精確地圖。點圓點或右側城市可跳到該行程；滑過每日卡片會標示當天城市；城市的景點全部打勾後會變綠色。</p>
           </section>
 
           <div id="days" class="days-head">
