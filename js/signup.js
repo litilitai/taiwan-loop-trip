@@ -53,6 +53,7 @@
 
     if (!name) return say('請輸入姓名。', 'err');
     if (!email || !form.elements.email.checkValidity()) return say('Email 格式不正確。', 'err');
+    if (!form.elements.consent.checked) return say('請先勾選同意個人資料使用說明。', 'err');
     if (!client) return say('無法載入連線元件，請檢查網路後重新整理頁面。', 'err');
     if (navigator.onLine === false) return say('目前沒有網路連線，連上網路後再試。', 'err');
 

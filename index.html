@@ -4,33 +4,55 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>台灣環島旅遊規劃</title>
-  <meta name="description" content="選天數、交通與預算等級，自動產生環島行程清單與費用估算。">
-  <link rel="icon" href="data:,">
+  <meta name="description" content="選天數、交通與預算等級，自動產生環島行程清單、路線圖與費用估算，還能一鍵分享給旅伴。">
+  <meta name="theme-color" content="#2f8f6b">
+  <meta property="og:title" content="台灣環島旅遊規劃">
+  <meta property="og:description" content="選天數、交通與預算，馬上得到環島行程、路線圖與費用估算。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%8F%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <header class="hero">
+<body id="top">
+  <a class="skip" href="#planner">跳到主要內容</a>
+
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="環島規劃，回到頁首">🌏<span class="brand-text"> 環島規劃</span></a>
+    <nav aria-label="頁面導覽">
+      <a href="#planner">設定</a>
+      <a class="needs-plan" href="#budget">預算</a>
+      <a class="needs-plan" href="#map">路線圖</a>
+      <a class="needs-plan" href="#days">行程</a>
+      <a href="#signup">通知我</a>
+    </nav>
+  </header>
+
+  <section class="hero">
     <div class="hero-inner">
       <p class="eyebrow">Taiwan Round-Island Trip</p>
       <h1>台灣環島旅遊規劃</h1>
-      <p class="lead">選好天數、交通與預算，馬上得到一份逆時針環島行程清單和費用估算。</p>
+      <p class="lead">選好天數、交通與預算，馬上得到一份逆時針環島行程、路線圖和費用估算。</p>
+      <ul class="chips" aria-label="功能特色">
+        <li>💰 預算即時估算</li>
+        <li>🗺 路線圖與 Google 地圖</li>
+        <li>🔗 一鍵分享給旅伴</li>
+      </ul>
       <a class="btn btn-light" href="#planner">開始規劃</a>
     </div>
-  </header>
+  </section>
 
   <main>
     <section id="planner" class="panel">
-      <h2>1. 設定你的旅程</h2>
+      <h2><span class="step">1</span>設定你的旅程</h2>
       <form id="settings" class="settings" autocomplete="off">
         <label>天數
-          <select id="days">
+          <select id="days-select">
             <option value="5">5 天（快閃）</option>
             <option value="7" selected>7 天（標準）</option>
             <option value="10">10 天（悠閒）</option>
           </select>
         </label>
         <label>人數
-          <input id="people" type="number" min="1" max="20" value="2">
+          <input id="people" type="number" min="1" max="20" value="2" inputmode="numeric">
         </label>
         <label>交通方式
           <select id="transport"></select>
@@ -42,44 +64,76 @@
             <option value="2">享受（精品民宿、餐廳）</option>
           </select>
         </label>
+        <label>出發日期（選填）
+          <input id="start-date" type="date">
+        </label>
         <button id="generate" type="submit" class="btn">產生行程</button>
       </form>
-      <p id="warning" class="warning" hidden></p>
-      <p class="hint">人數、交通、預算等級可隨時調整，費用會即時更新；要改天數請按「產生行程」重新排。</p>
+      <p id="warning" class="warning" role="status" hidden></p>
+      <p class="hint">人數、交通、預算等級和日期可隨時調整，費用會即時更新；要改天數請按「產生行程」重新排。</p>
+    </section>
+
+    <section id="intro" class="intro" aria-label="使用方式">
+      <article class="panel">
+        <span class="step">1</span>
+        <h3>設定旅程</h3>
+        <p>選擇天數、人數、交通方式與預算等級，有出發日期的話可以一併填入。</p>
+      </article>
+      <article class="panel">
+        <span class="step">2</span>
+        <h3>自動排行程</h3>
+        <p>系統依逆時針路線分配每天的景點，你可以刪減、調整順序或新增自訂項目。</p>
+      </article>
+      <article class="panel">
+        <span class="step">3</span>
+        <h3>分享與出發</h3>
+        <p>複製連結或文字傳給旅伴，景點一鍵在 Google 地圖開啟，邊玩邊打勾。</p>
+      </article>
     </section>
 
     <section id="result" class="result" hidden>
-      <aside class="panel budget" aria-labelledby="budget-title">
-        <h2 id="budget-title">2. 預算估算</h2>
-        <div id="budget-rows"></div>
-        <div class="total">
-          <span>總計（含 10% 預備金）</span>
-          <strong id="total"></strong>
-        </div>
-        <div class="total per">
-          <span>平均每人</span>
-          <strong id="per-person"></strong>
-        </div>
-        <p class="hint">以上為粗估值，實際價格依季節、訂房時間與店家而異。</p>
-        <div class="actions">
-          <button id="print" type="button" class="btn btn-ghost">列印／存成 PDF</button>
-          <button id="reset" type="button" class="btn btn-ghost danger">清除全部</button>
-        </div>
-      </aside>
+      <div id="season-tip" class="tip" role="note" hidden></div>
 
-      <div class="itinerary">
-        <section class="panel map-panel" aria-labelledby="map-title">
-          <h2 id="map-title">3. 環島路線圖</h2>
-          <div id="route-map"></div>
-          <p class="hint">這是示意圖，非精確地圖。點圓點可跳到該城市的行程；滑過每日卡片會標示當天城市；城市的景點全部打勾後會變綠色。</p>
-        </section>
+      <div class="result-grid">
+        <aside id="budget" class="panel budget" aria-labelledby="budget-title">
+          <h2 id="budget-title"><span class="step">2</span>預算估算</h2>
+          <div id="budget-rows"></div>
+          <div class="total">
+            <span>總計（含 10% 預備金）</span>
+            <strong id="total"></strong>
+          </div>
+          <div class="total per">
+            <span>平均每人</span>
+            <strong id="per-person"></strong>
+          </div>
+          <p class="hint">以上為粗估值，實際價格依季節、訂房時間與店家而異。</p>
+        </aside>
 
-        <h2>4. 行程清單 <small id="progress"></small></h2>
-        <div id="days-list"></div>
+        <div class="itinerary">
+          <section id="map" class="panel map-panel" aria-labelledby="map-title">
+            <h2 id="map-title"><span class="step">3</span>環島路線圖</h2>
+            <div id="route-map"></div>
+            <p class="hint">示意圖，非精確地圖。點圓點跳到該城市的行程；滑過每日卡片會標示當天城市；城市的景點全部打勾後會變綠色。</p>
+          </section>
+
+          <div id="days" class="days-head">
+            <h2><span class="step">4</span>行程清單 <small id="progress"></small></h2>
+            <div class="tools">
+              <button id="share" type="button" class="btn btn-ghost btn-small">🔗 分享連結</button>
+              <button id="copytext" type="button" class="btn btn-ghost btn-small">📋 複製文字</button>
+              <button id="print" type="button" class="btn btn-ghost btn-small">🖨 列印／PDF</button>
+              <button id="reset" type="button" class="btn btn-ghost btn-small danger">清除</button>
+            </div>
+          </div>
+          <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+          <div id="days-list"></div>
+        </div>
       </div>
     </section>
+
     <section id="signup" class="panel signup">
-      <h2>留下資料，收到旅遊更新</h2>
+      <h2>有新功能時通知我</h2>
+      <p class="sub">留下姓名與 Email，網站新增功能時會聯絡你。</p>
       <form id="signup-form" novalidate>
         <label>姓名
           <input name="name" type="text" maxlength="50" required autocomplete="name">
@@ -87,20 +141,48 @@
         <label>Email
           <input name="email" type="email" maxlength="254" required autocomplete="email">
         </label>
+        <label class="consent">
+          <input name="consent" type="checkbox" required>
+          <span>我已閱讀並同意下方的個人資料使用說明</span>
+        </label>
         <button id="signup-btn" type="submit" class="btn">送出</button>
       </form>
       <p id="signup-msg" class="signup-msg" role="status" aria-live="polite"></p>
+      <details class="privacy">
+        <summary>個人資料使用說明</summary>
+        <ul>
+          <li><strong>蒐集項目：</strong>姓名、Email。</li>
+          <li><strong>使用目的：</strong>僅用於通知本網站的功能更新。</li>
+          <li><strong>保存方式：</strong>儲存在 Supabase 資料庫，直到你要求刪除或網站停止服務。</li>
+          <li><strong>第三方：</strong>不會出售或提供給其他人。</li>
+          <li><strong>你的權利：</strong>可隨時請求查詢、更正或刪除。請到
+            <a href="https://github.com/litilitai/taiwan-loop-trip/issues" target="_blank" rel="noopener noreferrer">本專案的 GitHub 頁面</a>
+            開一個 issue，寫上你報名時使用的姓名即可（請不要貼上 Email）。</li>
+        </ul>
+      </details>
     </section>
   </main>
 
-  <footer>
-    <p>資料儲存在你的瀏覽器中，不會上傳到任何地方。</p>
+  <footer data-ascii-bg>
+    <h2 class="footer-title">準備好出發了嗎？</h2>
+    <p class="footer-lead">環島的路很長，慢慢走，慢慢看。</p>
+    <a class="btn btn-light" href="#planner">回到頂部重新規劃</a>
+    <p class="fine">行程與費用皆為粗估，出發前請再確認開放時間、天氣與交通。</p>
+    <p class="fine">你的行程儲存在自己的瀏覽器中，不會上傳到任何地方。</p>
   </footer>
+
+  <div id="mobile-bar" class="mobile-bar" hidden>
+    <div><small>預估總計</small><strong id="mb-total"></strong></div>
+    <div><small>每人</small><strong id="mb-per"></strong></div>
+    <a class="btn btn-small" href="#budget">明細</a>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script src="js/signup.js"></script>
   <script src="js/data-rain.js"></script>
+  <script src="js/ascii-bg.js"></script>
 </body>
 </html>
