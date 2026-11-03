@@ -1,0 +1,13 @@
+# 機密與依賴
+.env
+.env.*
+*.key
+node_modules/
+
+# 本機工具設定
+.claude/
+
+# 與網站無關或未使用的檔案（仍保留在電腦上，只是不上傳）
+2454-today.html
+New Text Document.txt
+js/ascii-bg.js
